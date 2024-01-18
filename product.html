@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>product</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="myitem">
+
+    </div>
+    <script>
+        let id = window.location.search.replace("?id=", "")
+
+        console.log(id);
+
+    let response = new Promise(async (resolve,reject)=>{
+        try {
+            let res =await fetch(`https://dummyjson.com/products/${id}`)
+            const data = await res.json()
+            resolve(data)
+
+            console.log(data);
+
+            let myitem = document.querySelector('.myitem')
+            let stock = [data]
+
+            stock.forEach((product,index)=>{
+        let item = document.createElement("div")
+        item.className="product"
+
+        let image = document.createElement('img')
+        image.setAttribute('src', product.images[0])
+
+        let title = document.createElement('div')
+        title.className="title"
+        title.textContent = product.title
+
+        let price = document.createElement('div')
+        price.className="price"
+        price.textContent = `Ksh. ${product.price}`
+
+        let viewbtn = document.createElement('button')
+        viewbtn.textContent = "View Item"
+        viewbtn.addEventListener('click', ()=>{
+            window.location.href = `product.html?id=${index+1}`
+        })
+
+        item.appendChild(image)
+        item.appendChild(title)
+        item.appendChild(price)
+        item.appendChild(viewbtn)
+
+        let desc = document.createElement('p')
+        desc.textContent=product.description
+
+        myitem.appendChild(item)
+        myitem.appendChild(desc)
+    })
+
+        } catch (error) {
+            reject('Error fetch products:', error)
+        }
+    })
+    
+
+    </script>
+</body>
+</html>
